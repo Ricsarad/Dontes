@@ -1,0 +1,96 @@
+param napokszama:=30;
+
+
+
+param szabadido:=
+1	3
+2	4
+3	5
+4	3
+5	4
+6	6
+7	6
+8	3
+9	3
+10	3
+11	4
+12	5
+13	6
+14	6
+15	4
+16	2
+17	4
+18	2
+19	4
+20	6
+21	6
+22	4
+23	3
+24	3
+25	3
+26	3
+27	4
+28	6
+29	6
+30	2
+;
+
+param ping:=
+1	1
+2	0
+3	1
+4	0
+5	1
+6	0
+7	1
+8	1
+9	0
+10	0
+11	1
+12	1
+13	0
+14	0
+15	0
+16	0
+17	1
+18	0
+19	0
+20	0
+21	1
+22	0
+23	1
+24	0
+25	1
+26	0
+27	0
+28	0
+29	0
+30	0
+;
+
+set Jatekok:=CoD LoL GTA HS AOE;
+
+param versenyszint:=
+CoD	19
+LoL	30
+GTA	20
+HS	15
+AOE	17
+;
+param minjatekido:=
+CoD	4
+LoL	3
+GTA	6
+HS	3
+AOE	2
+;
+
+param online:=
+CoD	0
+LoL	1
+GTA	0
+HS	1
+AOE	0
+;
+end;
+
