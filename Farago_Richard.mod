@@ -1,7 +1,8 @@
 param napokszama;
 set Napok:=1..napokszama;
+set Gamer;
 
-param szabadido{n in Napok};
+param szabadido{n in Napok, g in Gamer};
 param ping{n in Napok};
 
 set Jatekok;
@@ -10,34 +11,34 @@ param minjatekido{j in Jatekok};
 param online{j in Jatekok};
 
 
-var jatek{n in Napok, j in Jatekok}, binary;
+var jatek{n in Napok, j in Jatekok, g in Gamer}, binary;
+
+s.t. online_csak_ha_mindenki_raer{n in Napok,g in Gamer, j in Jatekok: minjatekido[j]>szabadido[n,g] && online[j] ==1 }:
+jatek[n,j,'David']=0;
 
 
 s.t.egy_nap_egy_jatek{n in Napok}:
-sum{j in Jatekok} jatek[n,j]<=1;
+sum{j in Jatekok} jatek[n,j,'David']=1;
 
 
 s.t. max_2nap_lehet_ugyanazt_jatszani{n in Napok,j in Jatekok: n>=3}:
-jatek [n,j] + jatek [n-1,j]+ jatek[n-2, j] <=2; 
+jatek [n,j,'David'] + jatek [n-1,j,'David']+ jatek[n-2, j,'David'] <=2; 
 
 
+s.t. online_jatek_csak_akkor_ha_nincs_ping {n in Napok,  j in Jatekok: ping[n] == 1 && online[j] ==1}:
+jatek[n,j,'David'] =0;
 
 
-s.t. online_jatek_csak_akkor_ha_nincs_ping_LoL {n in Napok,  j in Jatekok: ping[n] == 1 && online[j] ==1}:
-jatek[n,j] =0;
+s.t. legyen_eleg_minjatekidore{n in Napok, j in Jatekok, g in Gamer: minjatekido[j]>szabadido[n,'David']}:
+jatek[n,j,'David']=0;
 
-
-
-s.t. legyen_eleg_minjatekidore{n in Napok, j in Jatekok: minjatekido[j]>szabadido[n]}:
-jatek[n,j]=0;
-
-s.t.versenyszint_meglegyen{j in Jatekok}:
-sum{n in Napok} jatek[n,j]*szabadido[n] >= versenyszint[j];
+s.t.versenyszint_meglegyen{j in Jatekok, g in Gamer}:
+sum{n in Napok} jatek[n,j,'David']*szabadido[n,'David'] >= versenyszint[j];
 
 
 
 maximize LoL:
-sum{n in Napok} szabadido[n]*jatek[n,'LoL'] ;
+sum{n in Napok} szabadido[n,'David']*jatek[n,'LoL','David'] ;
 
 
 var CoD_jatekido;
@@ -47,19 +48,19 @@ var HS_jatekido;
 var AoE_jatekido;
 
 s.t.CoD_jatekido_Constraint:
-CoD_jatekido=sum{n in Napok} jatek[n,'CoD']*szabadido[n];
+CoD_jatekido=sum{n in Napok} jatek[n,'CoD','David']*szabadido[n,'David'];
 
 s.t.LoL_jatekido_Constraint:
-LoL_jatekido=sum{n in Napok} jatek[n,'LoL']*szabadido[n];
+LoL_jatekido=sum{n in Napok} jatek[n,'LoL','David']*szabadido[n,'David'];
 
 s.t.GTA_jatekido_Constraint:
-GTA_jatekido=sum{n in Napok} jatek[n,'GTA']*szabadido[n];
+GTA_jatekido=sum{n in Napok} jatek[n,'GTA','David']*szabadido[n,'David'];
 
 s.t.HS_jatekido_Constraint:
-HS_jatekido=sum{n in Napok} jatek[n,'HS']*szabadido[n];
+HS_jatekido=sum{n in Napok} jatek[n,'HS','David']*szabadido[n,'David'];
 
 s.t.AoE_jatekido_Constraint:
-AoE_jatekido=sum{n in Napok} jatek[n,'AOE']*szabadido[n];
+AoE_jatekido=sum{n in Napok} jatek[n,'AOE','David']*szabadido[n,'David'];
 
 solve; 
 
@@ -75,7 +76,7 @@ printf "p?|nap|jatek\n\n";
 for{ n in Napok}
  {
   printf"%s%2d: ",if (ping[n]=1) then "*" else " ", n;
- for {j in Jatekok: jatek[n,j]=1}
+ for {j in Jatekok: jatek[n,j,'David']=1}
  printf"%s\n",j;
 
  }
