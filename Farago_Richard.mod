@@ -21,10 +21,11 @@ s.t. max_2nap_lehet_ugyanazt_jatszani{n in Napok,j in Jatekok: n>=3}:
 jatek [n,j] + jatek [n-1,j]+ jatek[n-2, j] <=2; 
 
 
-s.t. online_jatek_csak_akkor_ha_nincs_ping_LoL {n in Napok: ping[n] =1}:
-jatek[n,'LoL'] =0;
-s.t. online_jatek_csak_akkor_ha_nincs_ping_HS {n in Napok: ping[n] =1}:
-jatek[n,'HS'] =0;
+
+
+s.t. online_jatek_csak_akkor_ha_nincs_ping_LoL {n in Napok,  j in Jatekok: ping[n] == 1 && online[j] ==1}:
+jatek[n,j] =0;
+
 
 
 s.t. legyen_eleg_minjatekidore{n in Napok, j in Jatekok: minjatekido[j]>szabadido[n]}:
